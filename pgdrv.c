@@ -336,7 +336,7 @@ static int dev_mmap(struct file *filp, struct vm_area_struct *vma)
 			break;
 	}
 
-	vma->vm_flags |= VM_IO;
+	vm_flags_set(vma, VM_IO);
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,11)
 	if (remap_page_range(vma, vma->vm_start, mydev->base_phyaddr, vma->vm_end-vma->vm_start, vma->vm_page_prot))
 	{
