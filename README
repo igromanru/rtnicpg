@@ -44,3 +44,29 @@ Method 2:
 	1. The applications are only for little-endian platform.
 	2. Must login with "root".
 	3. The NIC driver must be unload first or the pgdrv.ko cannot work.
+
+## How to change NIC (MAC) in eFuse
+Same works with `eeprom`, but many modern systems don't use eeprom and you have to burn eFuse to change it.  
+1. Secure Boot must be disabled in BIOS.
+2. Compile the code for current linux (use Debian/Ubuntu)
+	```bash
+	sudo apt update
+	sudo apt install -y build-essential linux-headers-$(uname -r)
+	make clean
+	make
+	```
+3. Place the precompiled driver from [Release](https://github.com/igromanru/rtnicpg/releases) into the root directory
+4. Read current eFuse info
+   ```bash
+   sudo ./rtnicpg-x86_64 /r /efuse
+   ```
+   The `NODEID` will be the MAC seperated by spaces.
+5. To burn new NODEID (MAC) into eFuse use following command:
+   ```bash
+   sudo ./rtnicpg-x86_64 /efuse /nodeid [new MAC here]
+   ```
+   Thew new MAC should have no seperation between bytes and change only 1 byte at the time. As less you change as less eFuse will be burned.
+   Example for a full command:
+   ```bash
+   sudo ./rtnicpg-x86_64 /efuse /nodeid 047C16511337
+   ```
